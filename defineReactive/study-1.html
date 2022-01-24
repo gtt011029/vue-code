@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        // const obj = {}
+
+        function defineReactive(obj, key, val) {
+            Object.defineProperty(obj, key, {
+                get() {
+                    console.log(`get ${key}:${val}`);
+                    return val
+                },
+                set(newVal) {
+                    if (newVal !== val) {
+                        val = newVal
+                        update()
+                    }
+                }
+            })
+        }
+
+        // defineReactive(obj, 'foo', '')
+
+        function update() {
+            app.innerText = obj.foo
+        }
+
+
+        // 响应需要遍历(观察者)
+        function observe(obj) {
+            if (typeof obj !== 'object' || obj === null) {
+               return
+            } else {
+                Object.keys(obj).forEach((key) => {
+                    defineReactive(obj, key, obj[key])
+                })
+            }
+        }
+
+        // setInterval(() => {
+        //     obj.foo = new Date().toLocaleTimeString()
+        // }, 1000)
+
+        const obj = {foo: 'foo', bar: 'bar', baz: {a: 1}}
+        observe(obj)
+        obj.foo
+        obj.foo = 'foooooooo'
+        obj.bar
+        obj.bar = 'barrrrr'
+        obj.baz
+        obj.baz.a = 10
+    </script>
+
+</body>
+</html>
